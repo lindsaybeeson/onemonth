@@ -4,6 +4,8 @@ var body = document.querySelector('body');
 var container = document.createElement('div');
 body.appendChild(container);
 
+container.innerHTML = "Hello";
+
 var input = "salary lindsay";
 
 
