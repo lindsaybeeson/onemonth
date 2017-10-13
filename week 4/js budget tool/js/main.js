@@ -20,14 +20,16 @@ Tabletop.init( { key: publicSpreadsheetUrl,
 function showInfo(data, tabletop) {
 //	console.log(data);
 	data.forEach(function(data){
+
+
 		var budgetItem = data['Budget Item'];
 		var daySpending = data['Spending / day'];
 
 //		container.innerHTML += budgetItem + ' ' + daySpending + '<br>';
 
-		if (budgetItem = input) {
-		container.innerHTML += daySpending + '</br>';
-		}
+//		if (budgetItem = input) {
+		container.innerHTML += budgetItem + ' ' + daySpending + '</br>';
+	
 	});
 }
 
