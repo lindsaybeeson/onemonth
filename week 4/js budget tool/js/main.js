@@ -27,9 +27,10 @@ function showInfo(data, tabletop) {
 
 //		container.innerHTML += budgetItem + ' ' + daySpending + '<br>';
 
-//		if (budgetItem = input) {
-		container.innerHTML += budgetItem + ' ' + daySpending + '</br>';
+		if (budgetItem = input) {
+		container.innerHTML = budgetItem + ' ' + daySpending + '</br>';
 	
+		}
 	});
 }
 
