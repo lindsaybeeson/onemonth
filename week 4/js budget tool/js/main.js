@@ -17,33 +17,44 @@ function init() {
 
 // Function to intialize select options via data from spreadsheet
 function initSelect(data) {
+
+	var filteredData = data.filter(function(datum) {
+
+		return datum['Budget Item'] !== '';
+
+	});
+
+	console.log(filteredData);
+
+
 	// Find the select and add an event listener to send data from selected option into function
 	// for use in rendering chart.
 	var select = document.querySelector('.select_list');
 	select.onchange = changeEventHandler;
 
-	data.forEach(function(data){
+	filteredData.forEach(function(filteredData){
 
 		var option = document.createElement('option');
-		option.value = data['Budget Item'];
-		option.text = data['Budget Item'];
+		var budgetItem = filteredData['Budget Item'];
+		option.value = budgetItem;
+		option.text = budgetItem;
 		select.appendChild(option);
 	});
 
 	// Function to call function handling rendering of charts
 	function changeEventHandler(event) {
 		var selection = event.target.value;
-		renderChart(selection, data);
+		renderChart(selection, filteredData);
    	}
 }
 
 // Function to call drawChart given a selection (category) and data from spreadsheet
-function renderChart(selection, data) {
+function renderChart(selection, filteredData) {
 	// Loop through array of objects and if the key matches selection, use data for drawing chart
-	data.forEach(function(data){
-		var budgetItem = data['Budget Item'];
-		var monthSpending = data['Avg Mo Spending'];
-		var monthBudgeted = data['Budgeted / mo'];
+	filteredData.forEach(function(filteredData){
+		var budgetItem = filteredData['Budget Item'];
+		var monthSpending = filteredData['Avg Mo Spending'];
+		var monthBudgeted = filteredData['Budgeted / mo'];
 
 		if (budgetItem === selection) {
 			drawChart(monthSpending, monthBudgeted)
