@@ -11,6 +11,7 @@ body.appendChild(container);
 function init() {
 	Tabletop.init( { key: publicSpreadsheetUrl,
                  	 callback: initSelect,
+                 	 orderby: 'budgetitem',
                  	 simpleSheet: true } )
 	}
 
@@ -19,12 +20,10 @@ function init() {
 function initSelect(data) {
 
 	var filteredData = data.filter(function(datum) {
-
 		return datum['Budget Item'] !== '';
-
 	});
 
-	console.log(filteredData);
+//	console.log(filteredData);
 
 
 	// Find the select and add an event listener to send data from selected option into function
@@ -32,23 +31,25 @@ function initSelect(data) {
 	var select = document.querySelector('.select_list');
 	select.onchange = changeEventHandler;
 
-	filteredData.forEach(function(filteredData){
+	filteredData.forEach(function(filteredDatum){
+
+	//	console.log("list");
 
 		var option = document.createElement('option');
-		var budgetItem = filteredData['Budget Item'];
+		var budgetItem = filteredDatum['Budget Item'];
 		option.value = budgetItem;
 		option.text = budgetItem;
 		select.appendChild(option);
 	});
 
 	// Function to call function handling rendering of charts
-	function changeEventHandler(event) {
+	function changeEventHandler(event) { 
 		var selection = event.target.value;
 		renderChart(selection, filteredData);
    	}
 }
 
-// Function to call drawChart given a selection (category) and data from spreadsheet
+// Function to call drawColumnChart given a selection (category) and data from spreadsheet
 function renderChart(selection, filteredData) {
 	// Loop through array of objects and if the key matches selection, use data for drawing chart
 	filteredData.forEach(function(filteredData){
@@ -57,7 +58,8 @@ function renderChart(selection, filteredData) {
 		var monthBudgeted = filteredData['Budgeted / mo'];
 
 		if (budgetItem === selection) {
-			drawChart(monthSpending, monthBudgeted)
+			drawColumnChart(monthSpending, monthBudgeted);
+			drawBarChart(monthSpending, monthBudgeted);
 		};
 	});
 }
@@ -72,28 +74,61 @@ window.addEventListener('DOMContentLoaded', init)
 google.charts.load('current', {'packages':['corechart']});
 
 // Set a callback to run when the Google Visualization API is loaded.
-google.charts.setOnLoadCallback(drawChart);
+google.charts.setOnLoadCallback(renderChart);
 
 // Callback that creates and populates a data table,
-// instantiates the pie chart, passes in the data and
+// instantiates the column chart, passes in the data and
 // draws it.
-function drawChart(spent, budgeted) {
+function drawColumnChart(spent, budgeted) {
 
 		var datum = google.visualization.arrayToDataTable([
 		['Item','Amount',{role: 'style'}],
-		['Spent', parseFloat(spent),'grey'],
-		['Budgeted', parseFloat(budgeted),'darkgrey']
+		['Spent', parseFloat(spent),'lightgrey'],
+		['Budgeted', parseFloat(budgeted),'pink']
 		]);
 
 	// Set chart options
-	var options =	{title:'Monthly',
-					width:600,
-					height:400,
-					colors:['grey'],
-					backgroundColor:'lightgrey'};
+	var options = {
+		title:'Monthly Average',
+		legend: {position: 'none'},
+/*		width:600,
+		height:400,
+*/		backgroundColor:'grey',
+		fontName: 'Montserrat',
+		chartArea:{width:'80%',height:'70%'},
+		titleTextStyle: {
+			color: 'black',
+			fontName: 'Montserrat',
+			fontSize: 24,
+			bold: true
+			}
+		};
 
-	// Instantiate and draw our chart, passing in some options.
-	var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-	chart.draw(datum, options);
+	// Instantiate and draw your chart, passing in some options.
+	var columnChart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+	columnChart.draw(datum, options);
+}
+
+function drawBarChart(spent, budgeted) {
+
+		var datum = google.visualization.arrayToDataTable([
+		['Item','Amount',{role: 'style'}],
+		['Spent', parseFloat(spent),'lightgrey'],
+		['Budgeted', parseFloat(budgeted),'pink']
+		]);
+
+	// Set chart options
+	var options = {
+		title:'Monthly',
+		legend: {position: 'none'},
+/*		width:600,
+		height:400,
+*/		backgroundColor:'grey',
+		fontName: 'Montserrat',
+		};
+
+	// Instantiate and draw your chart, passing in some options.
+	var barChart = new google.visualization.BarChart(document.getElementById('chart_div_2'));
+	barChart.draw(datum, options);
 }
 

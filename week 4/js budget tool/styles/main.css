@@ -1,9 +1,45 @@
+
 html, body {
 	height: 100%;
 	width: 100%;
 	min-height: 100%;
 	margin: 1%;
+	padding: 1%;
 	background-color: lightgray;
 	color: black;
+	font-family: Lato, sans-serif;
+}
+
+.select_list {
+	width: 45%;
+	height: 36px;
+	display: inline-block;
+	padding: 50px;
+	margin-bottom: 50px;
+	background-color: darkgray;
+	color: #404040;
+	font-size: 18px;
 	font-family: Montserrat, sans-serif;
+	text-transform: capitalize;
+	text-align: center;
+
+	border: 1px solid darkgray;
+	border-radius: 5px;
+}
+
+.results {
+	display: block;
+}
+
+.chart {
+	display: inline-block;
+	margin-right: 20px;
+	width: 45%;
+	min-height: 350px;
+	background-size: contain;
+}
+
+select:required:invalid {
+  color: gray;
+  font-weight: lighter;
 }
